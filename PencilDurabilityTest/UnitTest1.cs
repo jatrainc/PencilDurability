@@ -15,7 +15,7 @@ namespace PencilDurabilityTest
         [Test]
         public void TestPencilWritesToASheetOfPaper()
         {
-            Pencil pencil = new Pencil();
+            Pencil pencil = new Pencil(40);
             WriterUtility util = new WriterUtility();
             var sheetOfPaper = util.GetASheetOfPaper();
             var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
@@ -34,18 +34,17 @@ namespace PencilDurabilityTest
         [Test]
         public void TestPencilHasAPoint()
         {
-            var pencil = new Pencil();
-            Assert.AreEqual(pencil.point, 0);
-        }
-        [Test]
-        public void TestCreatePencil()
-        {
-            Assert.AreEqual(1, 1);
+            var pencil = new Pencil(40);
+            Assert.AreEqual(pencil.point, 40);
         }
         [Test]
         public void TestPointDegredation()
         {
-            Assert.AreEqual(1, 1);
+            Pencil pencil = new Pencil(40);
+            WriterUtility util = new WriterUtility();
+            var sheetOfPaper = util.GetASheetOfPaper();
+            var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            Assert.AreEqual(pencil.point, 36);
         }
     }
 }
