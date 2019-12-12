@@ -4,10 +4,11 @@ namespace PencilDurability.Pencil
 {
     public class Pencil
     {
+        public int point { get; set; }
 
         public string WriteToSheetOfPaper(string textToWrite, SheetOfPaper sheetOfPaper)
         {
-            sheetOfPaper.Text = textToWrite;
+            sheetOfPaper.Text = sheetOfPaper.Text + textToWrite;
             return sheetOfPaper.Text;
         }
     }

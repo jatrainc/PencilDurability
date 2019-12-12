@@ -20,6 +20,9 @@ namespace PencilDurabilityTest
             var sheetOfPaper = util.GetASheetOfPaper();
             var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
             Assert.AreEqual(result, sheetOfPaper.Text);
+            result = pencil.WriteToSheetOfPaper("ing 123", sheetOfPaper);
+            Assert.AreEqual(result, sheetOfPaper.Text);
+            Assert.AreEqual("Testing 123", sheetOfPaper.Text);
         }
         [Test]
         public void TestGetASheetOfPaper()
@@ -27,6 +30,12 @@ namespace PencilDurabilityTest
             WriterUtility util = new WriterUtility();
             var result = util.GetASheetOfPaper();
             Assert.IsTrue(result is SheetOfPaper);
+        }
+        [Test]
+        public void TestPencilHasAPoint()
+        {
+            var pencil = new Pencil();
+            Assert.AreEqual(pencil.point, 0);
         }
         [Test]
         public void TestCreatePencil()
