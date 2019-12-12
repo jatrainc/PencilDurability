@@ -1,12 +1,14 @@
 ﻿using System;
+using PencilDurability.Paper;
 
 namespace PencilDurability.Utility
 {
     public class WriterUtility
     {
-        public bool GetASheetOfPaper()
+        public SheetOfPaper GetASheetOfPaper()
         {
-            return true;
+            var sheetOfPaper = new SheetOfPaper();
+            return sheetOfPaper;
         }
     }
 }

@@ -1,12 +1,14 @@
 ﻿using System;
+using PencilDurability.Paper;
 namespace PencilDurability.Pencil
 {
     public class Pencil
     {
 
-        public string WriteToSheetOfPaper(string textToWrite)
+        public string WriteToSheetOfPaper(string textToWrite, SheetOfPaper sheetOfPaper)
         {
-            return textToWrite;
+            sheetOfPaper.Text = textToWrite;
+            return sheetOfPaper.Text;
         }
     }
 }

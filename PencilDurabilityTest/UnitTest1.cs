@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using PencilDurability.Pencil;
 using PencilDurability.Utility;
+using PencilDurability.Paper;
 
 namespace PencilDurabilityTest
 {
@@ -15,17 +16,17 @@ namespace PencilDurabilityTest
         public void TestPencilWritesToASheetOfPaper()
         {
             Pencil pencil = new Pencil();
-            var result = pencil.WriteToSheetOfPaper("Test");
-
-            Assert.AreEqual(result,"Test");
+            WriterUtility util = new WriterUtility();
+            var sheetOfPaper = util.GetASheetOfPaper();
+            var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            Assert.AreEqual(result, sheetOfPaper.Text);
         }
         [Test]
         public void TestGetASheetOfPaper()
         {
             WriterUtility util = new WriterUtility();
             var result = util.GetASheetOfPaper();
-
-            Assert.AreEqual(result, true);
+            Assert.IsTrue(result is SheetOfPaper);
         }
         [Test]
         public void TestCreatePencil()
