@@ -2,6 +2,7 @@
 using PencilDurability.Paper;
 using System.Collections.Generic;
 using PencilDurability.Exceptions;
+using PencilDurability.Erase;
 namespace PencilDurability.Pencil
 {
     public class Pencil
@@ -12,13 +13,15 @@ namespace PencilDurability.Pencil
         private List<char> lowerCaseLetters = new List<char> { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
         private List<char> spacesAndNewLines = new List<char> { ' ', '\n' };
 
-        public Pencil(int pointValue, int lengthValue)
+        public Pencil(int pointValue, int lengthValue, int eraserDurability)
         {
             this.point = pointValue;
             this.length = lengthValue;
+            eraser = new Eraser(eraserDurability);
         }
         public int point { get; set; }
         public int length { get; set; }
+        public Eraser eraser { get; set; }
 
         public string WriteToSheetOfPaper(string textToWrite, SheetOfPaper sheetOfPaper)
         {
@@ -54,5 +57,9 @@ namespace PencilDurability.Pencil
             length -= 1;
         }
 
+        public void Erase(string text, string textToErase)
+        {
+            eraser.Erase(text, textToErase);
+        }
     }
 }

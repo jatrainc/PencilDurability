@@ -9,20 +9,21 @@ namespace PencilDurabilityTest
 {
     public class Tests
     {
+        private Pencil _pencil;
         [SetUp]
         public void Setup()
         {
+            _pencil = new Pencil(40000, 10, 80000);
         }
 
         [Test]
         public void TestPencilWritesToASheetOfPaper()
         {
-            Pencil pencil = new Pencil(40000, 10);
             WriterUtility util = new WriterUtility();
             var sheetOfPaper = util.GetASheetOfPaper();
-            var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            var result = _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
             Assert.AreEqual(result, sheetOfPaper.Text);
-            result = pencil.WriteToSheetOfPaper("ing 123", sheetOfPaper);
+            result = _pencil.WriteToSheetOfPaper("ing 123", sheetOfPaper);
             Assert.AreEqual(result, sheetOfPaper.Text);
             Assert.AreEqual("Testing 123", sheetOfPaper.Text);
         }
@@ -36,70 +37,71 @@ namespace PencilDurabilityTest
         [Test]
         public void TestPencilHasAPoint()
         {
-            var pencil = new Pencil(40000, 10);
-            Assert.AreEqual(pencil.point, 40000);
+            Assert.AreEqual(_pencil.point, 40000);
         }
         [Test]
         public void TestPointDegredation()
         {
-            Pencil pencil = new Pencil(40000, 10);
             WriterUtility util = new WriterUtility();
             var sheetOfPaper = util.GetASheetOfPaper();
-            var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
-            Assert.AreEqual(pencil.point, 39995);
+            var result = _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            Assert.AreEqual(_pencil.point, 39995);
 
-            result = pencil.WriteToSheetOfPaper("Tes ", sheetOfPaper);
-            Assert.AreEqual(pencil.point, 39991);
+            result = _pencil.WriteToSheetOfPaper("Tes ", sheetOfPaper);
+            Assert.AreEqual(_pencil.point, 39991);
         }
         [Test]
         public void TestPencilLength()
         {
-            Pencil pencil = new Pencil(40000, 10);
-            Assert.AreEqual(pencil.length, 10);
+            _pencil.length = 11;
+            Assert.AreEqual(_pencil.length, 11);
         }
         [Test]
         public void TestSharpenPencil()
         {
-            Pencil pencil = new Pencil(40000, 10);
             WriterUtility util = new WriterUtility();
             var sheetOfPaper = util.GetASheetOfPaper();
-            var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
-            Assert.AreEqual(pencil.point, 39995);
+            var result = _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            Assert.AreEqual(_pencil.point, 39995);
 
-            pencil.Sharpen(40000);
-            Assert.AreEqual(pencil.point, 40000);
+            _pencil.Sharpen(40000);
+            Assert.AreEqual(_pencil.point, 40000);
         }
         [Test]
         public void TestSharpenPencilReducesLength()
         {
-            Pencil pencil = new Pencil(40000, 10);
             WriterUtility util = new WriterUtility();
             var sheetOfPaper = util.GetASheetOfPaper();
-            var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
-            Assert.AreEqual(pencil.point, 39995);
+            var result = _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            Assert.AreEqual(_pencil.point, 39995);
 
-            pencil.Sharpen(40000);
-            Assert.AreEqual(pencil.point, 40000);
-            Assert.AreEqual(pencil.length, 9);
+            _pencil.Sharpen(40000);
+            Assert.AreEqual(_pencil.point, 40000);
+            Assert.AreEqual(_pencil.length, 9);
         }
         [Test]
         public void TestPencilLengthZeroProhibitsSharpening()
         {
-            Pencil pencil = new Pencil(40000, 0);
-            TestDelegate d = ()=>pencil.Sharpen(40000);
+            _pencil.length = 0;
+            TestDelegate d = ()=>_pencil.Sharpen(40000);
             Assert.Throws<CannotSharpenPencilLengthZeroException>(d, "", new object[1]);
         }
         [Test]
         public void TestEraseLastOccuranceOfText()
         {
-            Pencil pencil = new Pencil(40000, 10);
             WriterUtility util = new WriterUtility();
             var sheetOfPaper = util.GetASheetOfPaper();
-            var result = pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
+            var result = _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
 
-            Eraser eraser = new Eraser();
+            Eraser eraser = new Eraser(40000);
             var eraserResult = eraser.Erase(result, "123");
             Assert.AreEqual(eraserResult, "Testing 123 ");
+        }
+        [Test]
+        public void TestEraserDurability()
+        {
+            Eraser eraser = new Eraser(40000);
+            Assert.AreEqual(eraser.durablility, 40000);
         }
     }
 }
