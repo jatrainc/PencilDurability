@@ -3,6 +3,7 @@ using PencilDurability.Pencil;
 using PencilDurability.Utility;
 using PencilDurability.Paper;
 using PencilDurability.Exceptions;
+using PencilDurability.Erase;
 
 namespace PencilDurabilityTest
 {
@@ -87,6 +88,13 @@ namespace PencilDurabilityTest
             Pencil pencil = new Pencil(40000, 0);
             TestDelegate d = ()=>pencil.Sharpen(40000);
             Assert.Throws<CannotSharpenPencilLengthZeroException>(d, "", new object[1]);
+        }
+        [Test]
+        public void TestEraseText()
+        {
+            Eraser eraser = new Eraser();
+            var result = eraser.Erase("Test");
+            Assert.AreEqual(result, "Test");
         }
     }
 }
