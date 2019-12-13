@@ -55,5 +55,17 @@ namespace PencilDurabilityTest
             Pencil pencil = new Pencil(40000, 10);
             Assert.AreEqual(pencil.length, 10);
         }
+        [Test]
+        public void TestSharpenPencil()
+        {
+            Pencil pencil = new Pencil(40000, 10);
+            WriterUtility util = new WriterUtility();
+            var sheetOfPaper = util.GetASheetOfPaper();
+            var result = pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            Assert.AreEqual(pencil.point, 39995);
+
+            pencil.Sharpen(40000);
+            Assert.AreEqual(pencil.point, 40000);
+        }
     }
 }
