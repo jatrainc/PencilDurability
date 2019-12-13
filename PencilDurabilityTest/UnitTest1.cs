@@ -90,16 +90,16 @@ namespace PencilDurabilityTest
             Assert.Throws<CannotSharpenPencilLengthZeroException>(d, "", new object[1]);
         }
         [Test]
-        public void TestEraseText()
+        public void TestEraseLastOccuranceOfText()
         {
             Pencil pencil = new Pencil(40000, 10);
             WriterUtility util = new WriterUtility();
             var sheetOfPaper = util.GetASheetOfPaper();
-            var result = pencil.WriteToSheetOfPaper("Testing 123", sheetOfPaper);
+            var result = pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
 
             Eraser eraser = new Eraser();
             var eraserResult = eraser.Erase(result, "123");
-            Assert.AreEqual(eraserResult, "Testing ");
+            Assert.AreEqual(eraserResult, "Testing 123 ");
         }
     }
 }

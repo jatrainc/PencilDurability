@@ -6,7 +6,7 @@ namespace PencilDurability.Erase
     {
         public string Erase(string text, string textToErase)
         {
-            var result = text.Remove(text.IndexOf(textToErase), textToErase.Length);
+            var result = text.Remove(text.LastIndexOf(textToErase), textToErase.Length);
             return result;
         }
     }
