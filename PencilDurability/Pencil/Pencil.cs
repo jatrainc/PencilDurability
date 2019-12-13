@@ -49,6 +49,7 @@ namespace PencilDurability.Pencil
         public void Sharpen(int pointValue)
         {
             point = pointValue;
+            length -= 1;
         }
 
     }
