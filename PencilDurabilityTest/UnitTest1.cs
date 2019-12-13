@@ -103,5 +103,14 @@ namespace PencilDurabilityTest
             Eraser eraser = new Eraser(40000);
             Assert.AreEqual(eraser.durablility, 40000);
         }
+        [Test]
+        public void TestEraserDegredation()
+        {
+            WriterUtility util = new WriterUtility();
+            var sheetOfPaper = util.GetASheetOfPaper();
+            var result = _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
+            var eraserResult = _pencil.eraser.Erase(result, "123");
+            Assert.AreEqual(_pencil.eraser.durablility, 79997);
+        }
     }
 }
