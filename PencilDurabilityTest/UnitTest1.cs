@@ -119,5 +119,13 @@ namespace PencilDurabilityTest
             TestDelegate d = () => _pencil.eraser.Erase("", "");
             Assert.Throws<CannotEraseDurabilityIsZeroException>(d, "", new object[1]);
         }
+        [Test]
+        public void TestEditText()
+        {
+            WriterUtility util = new WriterUtility();
+            var sheetOfPaper = util.GetASheetOfPaper();
+            var result = _pencil.Edit("Testing", "123");
+            Assert.AreEqual(result, "Testing123");
+        }
     }
 }

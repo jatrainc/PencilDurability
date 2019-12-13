@@ -61,5 +61,10 @@ namespace PencilDurability.Pencil
         {
             eraser.Erase(text, textToErase);
         }
+
+        public string Edit(string text, string textToInsert)
+        {
+            return text + textToInsert;
+        }
     }
 }
