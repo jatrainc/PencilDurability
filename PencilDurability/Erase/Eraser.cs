@@ -1,4 +1,5 @@
 ﻿using System;
+using PencilDurability.Exceptions;
 
 namespace PencilDurability.Erase
 {
@@ -6,13 +7,15 @@ namespace PencilDurability.Erase
     {
         public Eraser(int durabilityValue)
         {
-            this.durablility = durabilityValue;
+            this.durability = durabilityValue;
         }
-        public int durablility { get; set; }
+        public int durability { get; set; }
         public string Erase(string text, string textToErase)
         {
-            var result = text.Remove(text.LastIndexOf(textToErase), textToErase.Length);
-            durablility -= textToErase.Length;
+            if (durability == 0) throw new CannotEraseDurabilityIsZeroException();
+            var length = textToErase.Length > durability ? durability : textToErase.Length;
+            var result = text.Remove(text.LastIndexOf(textToErase), length);
+            durability -= length;
             return result;
         }
     }
