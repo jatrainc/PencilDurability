@@ -2,6 +2,7 @@ using NUnit.Framework;
 using PencilDurability.Pencil;
 using PencilDurability.Utility;
 using PencilDurability.Paper;
+using PencilDurability.Exceptions;
 
 namespace PencilDurabilityTest
 {
@@ -79,6 +80,13 @@ namespace PencilDurabilityTest
             pencil.Sharpen(40000);
             Assert.AreEqual(pencil.point, 40000);
             Assert.AreEqual(pencil.length, 9);
+        }
+        [Test]
+        public void TestPencilLengthZeroProhibitsSharpening()
+        {
+            Pencil pencil = new Pencil(40000, 0);
+            TestDelegate d = ()=>pencil.Sharpen(40000);
+            Assert.Throws<CannotSharpenPencilLengthZeroException>(d, "", new object[1]);
         }
     }
 }

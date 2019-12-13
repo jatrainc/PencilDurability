@@ -1,6 +1,7 @@
 ﻿using System;
 using PencilDurability.Paper;
 using System.Collections.Generic;
+using PencilDurability.Exceptions;
 namespace PencilDurability.Pencil
 {
     public class Pencil
@@ -48,6 +49,7 @@ namespace PencilDurability.Pencil
 
         public void Sharpen(int pointValue)
         {
+            if (length == 0) throw new CannotSharpenPencilLengthZeroException();
             point = pointValue;
             length -= 1;
         }
