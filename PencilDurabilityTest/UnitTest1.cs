@@ -92,9 +92,14 @@ namespace PencilDurabilityTest
         [Test]
         public void TestEraseText()
         {
+            Pencil pencil = new Pencil(40000, 10);
+            WriterUtility util = new WriterUtility();
+            var sheetOfPaper = util.GetASheetOfPaper();
+            var result = pencil.WriteToSheetOfPaper("Testing 123", sheetOfPaper);
+
             Eraser eraser = new Eraser();
-            var result = eraser.Erase("Test");
-            Assert.AreEqual(result, "Test");
+            var eraserResult = eraser.Erase(result, "123");
+            Assert.AreEqual(eraserResult, "Testing ");
         }
     }
 }
