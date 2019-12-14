@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using PencilDurability.Paper;
 using System.Collections.Generic;
 using PencilDurability.Exceptions;
@@ -64,7 +65,37 @@ namespace PencilDurability.Pencil
 
         public string Edit(string text, string textToInsert)
         {
-            return text + textToInsert;
+            var firstOccuranceOfTwoSpaces = text.IndexOf("  ");
+            var textToAlterWithInsert = text.Substring(firstOccuranceOfTwoSpaces, textToInsert.Length + 1);
+            var textBeforeInsert = text.Substring(0, firstOccuranceOfTwoSpaces);
+            var fromEndOfInsertToEndOfString = text.Length - (firstOccuranceOfTwoSpaces + 1 + textToInsert.Length);
+            var textAfterInsert = text.Substring(firstOccuranceOfTwoSpaces + 1 + textToInsert.Length, fromEndOfInsertToEndOfString);
+
+            var textToAlterResult = new StringBuilder();
+            var texToAlterLoopCounter = 0;
+            bool firstPass = true;
+            var textToInsertCharray = textToInsert.ToCharArray();
+            foreach (var ch in textToAlterWithInsert)
+            {
+                if (ch == ' ' && firstPass)
+                {
+                    textToAlterResult.Append(" ");
+                    firstPass = false;
+                    continue;
+                } 
+                else if (ch == ' ')
+                {
+                    textToAlterResult.Append(textToInsertCharray[texToAlterLoopCounter].ToString());
+                } 
+                else
+                {
+                    textToAlterResult.Append("@");
+                }
+                texToAlterLoopCounter++;
+            }
+            var result = textBeforeInsert + textToAlterResult.ToString() + textAfterInsert;
+            
+            return result;
         }
     }
 }

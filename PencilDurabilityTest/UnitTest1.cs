@@ -127,5 +127,33 @@ namespace PencilDurabilityTest
             var result = _pencil.Edit("Testing", "123");
             Assert.AreEqual(result, "Testing123");
         }
+        [Test]
+        public void TestEditTextWithCollisions()
+        {
+            WriterUtility util = new WriterUtility();
+            var sheetOfPaper = util.GetASheetOfPaper();
+            var result = _pencil.WriteToSheetOfPaper("Testing abc 123 123", sheetOfPaper);
+            var eraserResult = _pencil.eraser.Erase(result, "abc");
+            Assert.AreEqual(eraserResult, "Testing     123 123");
+            var editResult = _pencil.Edit(eraserResult, "artichoke");
+            Assert.AreEqual(editResult, "Testing arti@@@k@23");
+
+            sheetOfPaper = util.GetASheetOfPaper();
+            result = _pencil.WriteToSheetOfPaper("Testing abc 123 123 xyz", sheetOfPaper);
+            eraserResult = _pencil.eraser.Erase(result, "abc");
+            Assert.AreEqual(eraserResult, "Testing     123 123 xyz");
+            editResult = _pencil.Edit(eraserResult, "artichoke");
+            Assert.AreEqual(editResult, "Testing arti@@@k@23 xyz");
+
+            sheetOfPaper = util.GetASheetOfPaper();
+            result = _pencil.WriteToSheetOfPaper("An       a day keeps the doctor away", sheetOfPaper);
+            editResult = _pencil.Edit(result, "onion");
+            Assert.AreEqual(editResult, "An onion a day keeps the doctor away");
+
+            sheetOfPaper = util.GetASheetOfPaper();
+            result = _pencil.WriteToSheetOfPaper("An       a day keeps the doctor away", sheetOfPaper);
+            editResult = _pencil.Edit(result, "artichoke");
+            Assert.AreEqual(editResult, "An artich@k@ay keeps the doctor away");
+        }
     }
 }

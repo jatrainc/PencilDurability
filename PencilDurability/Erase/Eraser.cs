@@ -14,7 +14,8 @@ namespace PencilDurability.Erase
         {
             if (durability == 0) throw new CannotEraseDurabilityIsZeroException();
             var length = textToErase.Length > durability ? durability : textToErase.Length;
-            var result = text.Remove(text.LastIndexOf(textToErase), length);
+            var charrayOfSpaces = "   ";
+            var result = text.Replace(textToErase, charrayOfSpaces);
             durability -= length;
             return result;
         }
