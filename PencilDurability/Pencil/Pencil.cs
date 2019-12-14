@@ -65,12 +65,12 @@ namespace PencilDurability.Pencil
 
         public string Edit(string text, string textToInsert)
         {
-            var firstOccuranceOfTwoSpaces = text.IndexOf("  ");
-            if (firstOccuranceOfTwoSpaces < 1) return text + textToInsert;
-            var textToAlterWithInsert = text.Substring(firstOccuranceOfTwoSpaces, textToInsert.Length + 1);
-            var textBeforeInsert = text.Substring(0, firstOccuranceOfTwoSpaces);
-            var fromEndOfInsertToEndOfString = text.Length - (firstOccuranceOfTwoSpaces + 1 + textToInsert.Length);
-            var textAfterInsert = text.Substring(firstOccuranceOfTwoSpaces + 1 + textToInsert.Length, fromEndOfInsertToEndOfString);
+            var firstOccurrenceOfTwoSpaces = text.IndexOf("  ");
+            if (firstOccurrenceOfTwoSpaces < 1) return text + textToInsert;
+            var textToAlterWithInsert = text.Substring(firstOccurrenceOfTwoSpaces, textToInsert.Length + 1);
+            var textBeforeInsert = text.Substring(0, firstOccurrenceOfTwoSpaces);
+            var fromEndOfInsertToEndOfString = text.Length - (firstOccurrenceOfTwoSpaces + 1 + textToInsert.Length);
+            var textAfterInsert = text.Substring(firstOccurrenceOfTwoSpaces + 1 + textToInsert.Length, fromEndOfInsertToEndOfString);
 
             var textToAlterResult = new StringBuilder();
             var texToAlterLoopCounter = 0;

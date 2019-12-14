@@ -84,7 +84,7 @@ namespace PencilDurabilityTest
             Assert.Throws<CannotSharpenPencilLengthZeroException>(d, "", new object[1]);
         }
         [Test]
-        public void TestEraseLastOccuranceOfText()
+        public void TestEraseLastOccurrenceOfText()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
             var result = _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
@@ -92,6 +92,13 @@ namespace PencilDurabilityTest
             Eraser eraser = new Eraser(40000);
             var eraserResult = eraser.Erase(result, "123");
             Assert.AreEqual(eraserResult, "Testing 123    ");
+
+            sheetOfPaper = _writerUtility.GetASheetOfPaper();
+            result = _pencil.WriteToSheetOfPaper("How much wood would a woodchuck chuck if a woodchuck could chuck wood?", sheetOfPaper);
+            eraserResult = eraser.Erase(result, "chuck");
+            Assert.AreEqual(eraserResult, "How much wood would a woodchuck chuck if a woodchuck could       wood?");
+            eraserResult = eraser.Erase(eraserResult, "chuck");
+            Assert.AreEqual(eraserResult, "How much wood would a woodchuck chuck if a wood      could       wood?");
         }
         [Test]
         public void TestEraserDurability()
