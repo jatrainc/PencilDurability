@@ -66,6 +66,7 @@ namespace PencilDurability.Pencil
         public string Edit(string text, string textToInsert)
         {
             var firstOccuranceOfTwoSpaces = text.IndexOf("  ");
+            if (firstOccuranceOfTwoSpaces < 1) return text + textToInsert;
             var textToAlterWithInsert = text.Substring(firstOccuranceOfTwoSpaces, textToInsert.Length + 1);
             var textBeforeInsert = text.Substring(0, firstOccuranceOfTwoSpaces);
             var fromEndOfInsertToEndOfString = text.Length - (firstOccuranceOfTwoSpaces + 1 + textToInsert.Length);

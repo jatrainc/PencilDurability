@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Text;
 using PencilDurability.Exceptions;
 
 namespace PencilDurability.Erase
@@ -14,8 +14,16 @@ namespace PencilDurability.Erase
         {
             if (durability == 0) throw new CannotEraseDurabilityIsZeroException();
             var length = textToErase.Length > durability ? durability : textToErase.Length;
-            var charrayOfSpaces = "   ";
-            var result = text.Replace(textToErase, charrayOfSpaces);
+            var lastOccurrenceIndex = text.LastIndexOf(textToErase);
+            var firstPartOfResult = text.Substring(0, lastOccurrenceIndex);
+            var lastPartOfResultLength = text.Length - lastOccurrenceIndex - textToErase.Length;
+            var lastPartOfResult = text.Substring(lastOccurrenceIndex + textToErase.Length, lastPartOfResultLength);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < textToErase.Length; i++)
+            {
+                sb.Append(" ");
+            }
+            var result = firstPartOfResult + sb.ToString() + lastPartOfResult;
             durability -= length;
             return result;
         }
