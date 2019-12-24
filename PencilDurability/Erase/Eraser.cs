@@ -18,12 +18,20 @@ namespace PencilDurability.Erase
             var firstPartOfResult = text.Substring(0, lastOccurrenceIndex);
             var lastPartOfResultLength = text.Length - lastOccurrenceIndex - textToErase.Length;
             var lastPartOfResult = text.Substring(lastOccurrenceIndex + textToErase.Length, lastPartOfResultLength);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < textToErase.Length; i++)
+            StringBuilder textErasedPart = new StringBuilder();
+            var charray = textToErase.ToCharArray();
+            int numberOfCharsThatCantBeErased = textToErase.Length - this.durability;
+            //add any characters that can't be erased due to insufficient eraser durability
+            for(int j = 0; j < numberOfCharsThatCantBeErased; j++)
             {
-                sb.Append(" ");
+                textErasedPart.Append(charray[j].ToString());
             }
-            var result = firstPartOfResult + sb.ToString() + lastPartOfResult;
+            //add the number of spaces represented by length with is durability if textToErase is greater than the durability
+            for (int i = 0; i < length; i++)
+            {
+                textErasedPart.Append(" ");
+            }
+            var result = firstPartOfResult + textErasedPart.ToString() + lastPartOfResult;
             durability -= length;
             return result;
         }

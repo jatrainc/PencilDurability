@@ -115,6 +115,15 @@ namespace PencilDurabilityTest
             Assert.AreEqual(_pencil.eraser.durability, 79997);
         }
         [Test]
+        public void TestEraserDegradesToZeroWhileErasing()
+        {
+            var sheetOfPaper = _writerUtility.GetASheetOfPaper();
+            var result = _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
+            _pencil.eraser.durability = 2;
+            var eraserResult = _pencil.eraser.Erase(result, "123");
+            Assert.AreEqual(eraserResult, "Testing 123 1  ");
+        }
+        [Test]
         public void TestEraserDegredationWhenDurabilityIsZero()
         {
             _pencil.eraser.durability = 0;
