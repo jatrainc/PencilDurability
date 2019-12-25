@@ -13,6 +13,7 @@ namespace PencilDurability.Erase
         public string Erase(string text, string textToErase)
         {
             if (durability == 0) throw new CannotEraseDurabilityIsZeroException();
+            if (text.LastIndexOf(textToErase) < 0) throw new TextToEraseDoesNotExist();
             var length = textToErase.Length > durability ? durability : textToErase.Length;
             var lastOccurrenceIndex = text.LastIndexOf(textToErase);
             var firstPartOfResult = text.Substring(0, lastOccurrenceIndex);

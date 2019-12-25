@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using PencilDurability.Pencil;
+using PencilDurability.Pencils;
 using PencilDurability.Utility;
 using PencilDurability.Paper;
 using PencilDurability.Exceptions;
@@ -48,6 +48,14 @@ namespace PencilDurabilityTest
 
             result = _pencil.WriteToSheetOfPaper("Tes ", sheetOfPaper);
             Assert.AreEqual(_pencil.point, 39991);
+        }
+        [Test]
+        public void TestPointDegredationWhenPointReachesZero()
+        {
+            var sheetOfPaper = _writerUtility.GetASheetOfPaper();
+            _pencil.point = 3;
+            TestDelegate d = () => _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            Assert.Throws<PointHasDegradedToZeroException>(d, "", new object[1]);
         }
         [Test]
         public void TestPencilLength()

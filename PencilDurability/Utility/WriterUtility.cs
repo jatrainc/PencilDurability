@@ -1,5 +1,4 @@
-﻿using System;
-using PencilDurability.Paper;
+﻿using PencilDurability.Paper;
 
 namespace PencilDurability.Utility
 {

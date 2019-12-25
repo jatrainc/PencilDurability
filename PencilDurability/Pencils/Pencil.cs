@@ -4,7 +4,8 @@ using PencilDurability.Paper;
 using System.Collections.Generic;
 using PencilDurability.Exceptions;
 using PencilDurability.Erase;
-namespace PencilDurability.Pencil
+
+namespace PencilDurability.Pencils
 {
     public class Pencil
     {
@@ -26,16 +27,22 @@ namespace PencilDurability.Pencil
 
         public string WriteToSheetOfPaper(string textToWrite, SheetOfPaper sheetOfPaper)
         {
-            sheetOfPaper.Text += textToWrite;
-            DegradePointValue(textToWrite);
+            DegradePointValue(sheetOfPaper, textToWrite);
             return sheetOfPaper.Text;
         }
 
-        private void DegradePointValue(String text)
+        private void DegradePointValue(SheetOfPaper sheetOfPaper, String text)
         {
             var carray = text.ToCharArray();
             foreach (var c in carray)
             {
+                if (point == 0) 
+                {
+                    throw new PointHasDegradedToZeroException();
+                } else
+                {
+                    sheetOfPaper.Text += c.ToString();
+                }
                 if (upperCaseLetters.Contains(c))
                 {
                     point -= upperCaseLetterDegredationValue;
