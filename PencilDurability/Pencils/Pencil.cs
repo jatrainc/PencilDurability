@@ -17,12 +17,12 @@ namespace PencilDurability.Pencils
 
         public Pencil(int pointValue, int lengthValue, int eraserDurability)
         {
-            this.point = pointValue;
-            this.length = lengthValue;
+            Point = pointValue;
+            Length = lengthValue;
             eraser = new Eraser(eraserDurability);
         }
-        public int point { get; set; }
-        public int length { get; set; }
+        public int Point { get; set; }
+        public int Length { get; set; }
         public Eraser eraser { get; set; }
 
         public string WriteToSheetOfPaper(string textToWrite, SheetOfPaper sheetOfPaper)
@@ -36,7 +36,7 @@ namespace PencilDurability.Pencils
             var carray = text.ToCharArray();
             foreach (var c in carray)
             {
-                if (point == 0) 
+                if (Point == 0) 
                 {
                     throw new PointHasDegradedToZeroException();
                 } else
@@ -45,11 +45,11 @@ namespace PencilDurability.Pencils
                 }
                 if (upperCaseLetters.Contains(c))
                 {
-                    point -= upperCaseLetterDegredationValue;
+                    Point -= upperCaseLetterDegredationValue;
                 } 
                 else if (lowerCaseLetters.Contains(c))
                 {
-                    point -= lowerCaseLetterDegredationValue;
+                    Point -= lowerCaseLetterDegredationValue;
                 } 
                 else if (spacesAndNewLines.Contains(c))
                 {
@@ -60,9 +60,9 @@ namespace PencilDurability.Pencils
 
         public void Sharpen(int pointValue)
         {
-            if (length == 0) throw new CannotSharpenPencilLengthZeroException();
-            point = pointValue;
-            length -= 1;
+            if (Length == 0) throw new CannotSharpenPencilLengthZeroException();
+            Point = pointValue;
+            Length -= 1;
         }
 
         public void Erase(string text, string textToErase)
@@ -70,40 +70,53 @@ namespace PencilDurability.Pencils
             eraser.Erase(text, textToErase);
         }
 
-        public string Edit(string text, string textToInsert)
+        public void Edit(SheetOfPaper sheetOfPaper, string textToInsert)
         {
-            var firstOccurrenceOfTwoSpaces = text.IndexOf("  ");
-            if (firstOccurrenceOfTwoSpaces < 1) return text + textToInsert;
-            var textToAlterWithInsert = text.Substring(firstOccurrenceOfTwoSpaces, textToInsert.Length + 1);
-            var textBeforeInsert = text.Substring(0, firstOccurrenceOfTwoSpaces);
-            var fromEndOfInsertToEndOfString = text.Length - (firstOccurrenceOfTwoSpaces + 1 + textToInsert.Length);
-            var textAfterInsert = text.Substring(firstOccurrenceOfTwoSpaces + 1 + textToInsert.Length, fromEndOfInsertToEndOfString);
+            if (Point == 0) throw new PointHasDegradedToZeroException(); 
+            var firstOccurrenceOfTwoSpaces = sheetOfPaper.Text.IndexOf("  ");
+            if (firstOccurrenceOfTwoSpaces < 1) {
+                sheetOfPaper.Text = sheetOfPaper.Text + textToInsert;
+                return;
+            }
+            var textToAlterWithInsert = sheetOfPaper.Text.Substring(firstOccurrenceOfTwoSpaces, textToInsert.Length + 1);
+            var textBeforeInsert = sheetOfPaper.Text.Substring(0, firstOccurrenceOfTwoSpaces);
+            var fromEndOfInsertToEndOfString = sheetOfPaper.Text.Length - (firstOccurrenceOfTwoSpaces + 1 + textToInsert.Length);
+            var textAfterInsert = sheetOfPaper.Text.Substring(firstOccurrenceOfTwoSpaces + 1 + textToInsert.Length, fromEndOfInsertToEndOfString);
 
-            var textToAlterResult = new StringBuilder();
             var texToAlterLoopCounter = 0;
             bool firstPass = true;
             var textToInsertCharray = textToInsert.ToCharArray();
+            sheetOfPaper.Text = textBeforeInsert;
             foreach (var ch in textToAlterWithInsert)
             {
+                if (Point == 0)
+                {
+                    var remainderOfTextToInsert = textToAlterWithInsert.Substring(texToAlterLoopCounter, (textToAlterWithInsert.Length - texToAlterLoopCounter));
+                    sheetOfPaper.Text += remainderOfTextToInsert;
+                    sheetOfPaper.Text += textAfterInsert;
+                    throw new PointHasDegradedToZeroException();
+                }
                 if (ch == ' ' && firstPass)
                 {
-                    textToAlterResult.Append(" ");
+                    sheetOfPaper.Text += ch.ToString();
                     firstPass = false;
+                    //adding a space so no need to degrade point value
                     continue;
-                } 
+                }
                 else if (ch == ' ')
                 {
-                    textToAlterResult.Append(textToInsertCharray[texToAlterLoopCounter].ToString());
-                } 
+                    sheetOfPaper.Text += textToInsertCharray[texToAlterLoopCounter].ToString();
+                    Point--;
+                }
                 else
                 {
-                    textToAlterResult.Append("@");
+                    sheetOfPaper.Text += "@";
+                    Point--;
                 }
                 texToAlterLoopCounter++;
             }
-            var result = textBeforeInsert + textToAlterResult.ToString() + textAfterInsert;
-            
-            return result;
+            sheetOfPaper.Text += textAfterInsert;
+            return;
         }
     }
 }

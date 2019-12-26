@@ -71,9 +71,8 @@ namespace PencilDurability
                     else if (command == "d")
                     {
                         var textToInsert = Console.ReadLine();
-                        var result = pencil.Edit(sheetOfPaper.Text, textToInsert);
-                        sheetOfPaper.Text = result;
-                        Console.WriteLine(result);
+                         pencil.Edit(sheetOfPaper, textToInsert);
+                        Console.WriteLine(sheetOfPaper.Text);
                     }
                     else if (command == "x")
                     {

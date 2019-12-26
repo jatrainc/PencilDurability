@@ -6,8 +6,7 @@ namespace PencilDurability.Utility
     {
         public SheetOfPaper GetASheetOfPaper()
         {
-            var sheetOfPaper = new SheetOfPaper();
-            return sheetOfPaper;
+            return new SheetOfPaper();
         }
     }
 }

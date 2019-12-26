@@ -4,6 +4,6 @@ namespace PencilDurability.Paper
 {
     public class SheetOfPaper
     {
-        public String Text { get; set; }
+        public string Text { get; set; }
     }
 }
