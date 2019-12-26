@@ -43,10 +43,10 @@ namespace PencilDurabilityTest
         public void TestPointDegredation()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
-            var result = _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
             Assert.AreEqual(_pencil.Point, 39995);
 
-            result = _pencil.WriteToSheetOfPaper("Tes ", sheetOfPaper);
+            _pencil.WriteToSheetOfPaper("Tes ", sheetOfPaper);
             Assert.AreEqual(_pencil.Point, 39991);
         }
         [Test]
@@ -67,7 +67,7 @@ namespace PencilDurabilityTest
         public void TestSharpenPencil()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
-            var result = _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
             Assert.AreEqual(_pencil.Point, 39995);
 
             _pencil.Sharpen(40000);
@@ -77,7 +77,7 @@ namespace PencilDurabilityTest
         public void TestSharpenPencilReducesLength()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
-            var result = _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
+            _pencil.WriteToSheetOfPaper("Test", sheetOfPaper);
             Assert.AreEqual(_pencil.Point, 39995);
 
             _pencil.Sharpen(40000);
@@ -95,15 +95,15 @@ namespace PencilDurabilityTest
         public void TestEraseLastOccurrenceOfText()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
-            var result = _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
+            _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
 
             Eraser eraser = new Eraser(40000);
-            var eraserResult = eraser.Erase(result, "123");
+            var eraserResult = eraser.Erase(sheetOfPaper.Text, "123");
             Assert.AreEqual(eraserResult, "Testing 123    ");
 
             sheetOfPaper = _writerUtility.GetASheetOfPaper();
-            result = _pencil.WriteToSheetOfPaper("How much wood would a woodchuck chuck if a woodchuck could chuck wood?", sheetOfPaper);
-            eraserResult = eraser.Erase(result, "chuck");
+            _pencil.WriteToSheetOfPaper("How much wood would a woodchuck chuck if a woodchuck could chuck wood?", sheetOfPaper);
+            eraserResult = eraser.Erase(sheetOfPaper.Text, "chuck");
             Assert.AreEqual(eraserResult, "How much wood would a woodchuck chuck if a woodchuck could       wood?");
             eraserResult = eraser.Erase(eraserResult, "chuck");
             Assert.AreEqual(eraserResult, "How much wood would a woodchuck chuck if a wood      could       wood?");
@@ -118,24 +118,29 @@ namespace PencilDurabilityTest
         public void TestEraserDegredation()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
-            var result = _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
-            var eraserResult = _pencil.eraser.Erase(result, "123");
-            Assert.AreEqual(_pencil.eraser.durability, 79997);
+            _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
+            var eraserResult = _pencil.Eraser.Erase(sheetOfPaper.Text, "123");
+            Assert.AreEqual(_pencil.Eraser.durability, 79997);
         }
         [Test]
         public void TestEraserDegradesToZeroWhileErasing()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
-            var result = _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
-            _pencil.eraser.durability = 2;
-            var eraserResult = _pencil.eraser.Erase(result, "123");
+            _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
+            _pencil.Eraser.durability = 2;
+            var eraserResult = _pencil.Eraser.Erase(sheetOfPaper.Text, "123");
             Assert.AreEqual(eraserResult, "Testing 123 1  ");
-        }
+
+            sheetOfPaper = _writerUtility.GetASheetOfPaper();
+            _pencil.Eraser.durability = 3;
+            _pencil.WriteToSheetOfPaper("Buffalo Bill", sheetOfPaper);
+            sheetOfPaper.Text = _pencil.Eraser.Erase(sheetOfPaper.Text, "Bill");
+            Assert.AreEqual(sheetOfPaper.Text, "Buffalo B   ");        }
         [Test]
         public void TestEraserDegredationWhenDurabilityIsZero()
         {
-            _pencil.eraser.durability = 0;
-            TestDelegate d = () => _pencil.eraser.Erase("", "");
+            _pencil.Eraser.durability = 0;
+            TestDelegate d = () => _pencil.Eraser.Erase("", "");
             Assert.Throws<CannotEraseDurabilityIsZeroException>(d, "", new object[1]);
         }
         [Test]
@@ -150,15 +155,15 @@ namespace PencilDurabilityTest
         public void TestEditTextWithCollisions()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
-            sheetOfPaper.Text = _pencil.WriteToSheetOfPaper("Testing abc 123 123", sheetOfPaper);
-            sheetOfPaper.Text = _pencil.eraser.Erase(sheetOfPaper.Text, "abc");
+            _pencil.WriteToSheetOfPaper("Testing abc 123 123", sheetOfPaper);
+            sheetOfPaper.Text = _pencil.Eraser.Erase(sheetOfPaper.Text, "abc");
             Assert.AreEqual(sheetOfPaper.Text, "Testing     123 123");
             _pencil.Edit(sheetOfPaper, "artichoke");
             Assert.AreEqual(sheetOfPaper.Text, "Testing arti@@@k@23");
 
             sheetOfPaper = _writerUtility.GetASheetOfPaper();
             sheetOfPaper.Text = _pencil.WriteToSheetOfPaper("Testing abc 123 123 xyz", sheetOfPaper);
-            sheetOfPaper.Text = _pencil.eraser.Erase(sheetOfPaper.Text, "abc");
+            sheetOfPaper.Text = _pencil.Eraser.Erase(sheetOfPaper.Text, "abc");
             Assert.AreEqual(sheetOfPaper.Text, "Testing     123 123 xyz");
             _pencil.Edit(sheetOfPaper, "artichoke");
             Assert.AreEqual(sheetOfPaper.Text, "Testing arti@@@k@23 xyz");
@@ -181,7 +186,16 @@ namespace PencilDurabilityTest
             _pencil.Point = 3;
             TestDelegate d = () => _pencil.Edit(sheetOfPaper, "artichoke");
             Assert.Throws<PointHasDegradedToZeroException>(d, "", new object[1]);
-            Assert.AreEqual(sheetOfPaper.Text, "An art    a day keeps the doctor away");
+            Assert.AreEqual(sheetOfPaper.Text, "An art      ay keeps the doctor away");
+        }
+        [Test]
+        public void TestWriteTextWhenPointDegradationReachesZeroDuringTheEdit()
+        {
+            var sheetOfPaper = _writerUtility.GetASheetOfPaper();
+            _pencil.Point = 26;
+            TestDelegate d = () => _pencil.WriteToSheetOfPaper("An apple a day keeps the doctor away", sheetOfPaper);
+            Assert.Throws<PointHasDegradedToZeroException>(d, "", new object[1]);
+            Assert.AreEqual(sheetOfPaper.Text, "An apple a day keeps the doctor     ");
         }
     }
 }

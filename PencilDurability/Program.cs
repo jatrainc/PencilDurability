@@ -41,7 +41,7 @@ namespace PencilDurability
             {
                 try
                 {
-                    Console.WriteLine("Please enter w to write text, e to erase text or d to edit text, and text to write, erase or edit.  Enter x to exit.");
+                    Console.WriteLine("Please enter 'w' to write text, 'e' to erase text or 'd' to edit text. Then enter text to write, erase or edit.  Enter 'x' to exit.");
                     command = Console.ReadLine();
                     if (command == "w")
                     {
@@ -55,7 +55,7 @@ namespace PencilDurability
                         try
                         {
                             var textToErase = Console.ReadLine();
-                            var result = pencil.eraser.Erase(sheetOfPaper.Text, textToErase);
+                            var result = pencil.Eraser.Erase(sheetOfPaper.Text, textToErase);
                             sheetOfPaper.Text = result;
                             Console.WriteLine(result);
                         } catch (TextToEraseDoesNotExist t)
@@ -80,17 +80,18 @@ namespace PencilDurability
                     }
                     else
                     {
-                        Console.WriteLine("Please enter w to write text, e to erase text or d to edit text, and text to write, erase or edit.  Enter x to exit.");
+                        Console.WriteLine("Please enter 'w' to write text, 'e' to erase text or 'd' to edit text. Then enter text to write, erase or edit.  Enter 'x' to exit.");
                     }
                 } catch(PointHasDegradedToZeroException p)
                 {
-                    Console.WriteLine("Press s to sharpen pencil.");
+                    Console.WriteLine("Press 's' to sharpen pencil.");
                     command = Console.ReadLine();
                     if (command == "s")
                     {
                         try
                         {
                             pencil.Sharpen(pointValue);
+                            Console.WriteLine($"Sheet of paper text is:  {sheetOfPaper.Text}");
                         }
                         catch (CannotSharpenPencilLengthZeroException e)
                         {

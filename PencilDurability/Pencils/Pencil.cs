@@ -19,11 +19,11 @@ namespace PencilDurability.Pencils
         {
             Point = pointValue;
             Length = lengthValue;
-            eraser = new Eraser(eraserDurability);
+            Eraser = new Eraser(eraserDurability);
         }
         public int Point { get; set; }
         public int Length { get; set; }
-        public Eraser eraser { get; set; }
+        public Eraser Eraser { get; set; }
 
         public string WriteToSheetOfPaper(string textToWrite, SheetOfPaper sheetOfPaper)
         {
@@ -34,10 +34,13 @@ namespace PencilDurability.Pencils
         private void DegradePointValue(SheetOfPaper sheetOfPaper, String text)
         {
             var carray = text.ToCharArray();
+            int numberOfCharactersThatHaveBeenWritten = 0;
             foreach (var c in carray)
             {
                 if (Point == 0) 
                 {
+                    //set remaining text that should've been written to spaces
+                    GenerateRemainingSpaces(text.Length, sheetOfPaper, numberOfCharactersThatHaveBeenWritten);
                     throw new PointHasDegradedToZeroException();
                 } else
                 {
@@ -55,6 +58,7 @@ namespace PencilDurability.Pencils
                 {
                     //no degredation
                 }
+                numberOfCharactersThatHaveBeenWritten++;
             }
         }
 
@@ -67,7 +71,7 @@ namespace PencilDurability.Pencils
 
         public void Erase(string text, string textToErase)
         {
-            eraser.Erase(text, textToErase);
+            Eraser.Erase(text, textToErase);
         }
 
         public void Edit(SheetOfPaper sheetOfPaper, string textToInsert)
@@ -91,8 +95,8 @@ namespace PencilDurability.Pencils
             {
                 if (Point == 0)
                 {
-                    var remainderOfTextToInsert = textToAlterWithInsert.Substring(texToAlterLoopCounter, (textToAlterWithInsert.Length - texToAlterLoopCounter));
-                    sheetOfPaper.Text += remainderOfTextToInsert;
+                    //set remaining text that should've been written to spaces
+                    GenerateRemainingSpaces(textToInsert.Length, sheetOfPaper, texToAlterLoopCounter);
                     sheetOfPaper.Text += textAfterInsert;
                     throw new PointHasDegradedToZeroException();
                 }
@@ -117,6 +121,17 @@ namespace PencilDurability.Pencils
             }
             sheetOfPaper.Text += textAfterInsert;
             return;
+        }
+        private void GenerateRemainingSpaces(int lengthOfText, SheetOfPaper sheetOfPaper, int numberOfCharactersThatHaveBeenWritten)
+        {
+            //set remaining text that should've been written to spaces
+            int numberOfCharactersNotWritten = lengthOfText - numberOfCharactersThatHaveBeenWritten;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < numberOfCharactersNotWritten; i++)
+            {
+                sb.Append(" ");
+            }
+            sheetOfPaper.Text += sb.ToString();
         }
     }
 }
