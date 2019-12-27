@@ -67,6 +67,11 @@ namespace PencilDurability
                             Console.ReadLine();
                             break;
                         }
+                        if (pencil.Eraser.durability == 0)
+                        {
+                            Console.WriteLine("Eraser durability has been depleted.  All characters may not have been erased.");
+                            Console.WriteLine($"Sheet of paper text is:  {sheetOfPaper.Text}");
+                        }
                     }
                     else if (command == "d")
                     {

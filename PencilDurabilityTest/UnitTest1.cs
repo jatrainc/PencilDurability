@@ -144,6 +144,14 @@ namespace PencilDurabilityTest
             Assert.Throws<CannotEraseDurabilityIsZeroException>(d, "", new object[1]);
         }
         [Test]
+        public void TestEraseWhenTextToEraseIsNotInTheSheetOfPaperText()
+        {
+            var sheetOfPaper = _writerUtility.GetASheetOfPaper();
+            _pencil.WriteToSheetOfPaper("Testing 123 123", sheetOfPaper);
+            TestDelegate d = () => _pencil.Eraser.Erase(sheetOfPaper.Text, "456");
+            Assert.Throws<TextToEraseDoesNotExist>(d, "", new object[1]);
+        }
+        [Test]
         public void TestEditText()
         {
             var sheetOfPaper = _writerUtility.GetASheetOfPaper();
